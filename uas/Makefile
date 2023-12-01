@@ -1,9 +1,9 @@
 SIPP=../bin/sipp
 
-DN_LIST = $(shell seq $(SDN) $(EDN))
-DN_CNT  = $(words $(DN_LIST))
+#DN_LIST = $(shell seq $(SDN) $(EDN))
+#DN_CNT  = $(words $(DN_LIST))
 
-SCENARIO_PATH = xml/scenario
+SCENARIO_PATH = xml/call
 DATA_PATH     = csv
 
 PBX         = 100.100.106.153:5060
@@ -18,21 +18,12 @@ END_DN      = 6300
 
 defeault: register base
 
-
-.PHONY: show
-show:
-	@echo "show:"	
-	#@echo "SEQUENTIAL" > $(DN_DATA)
-	#@$(foreach DN, $(DN_LIST), `echo "$(ANI);$(DN)" >> $(DN_DATA)`)
-	#@echo "SEQUENTIAL" > $(DID_DATA)
-	#@echo "$(ANI);$(DNIS)" >> $(DID_DATA)
-
 .PHONY: data
 data:
 	@echo "data:"
-	
+	@echo "SEQUENTIAL" > $(DATA_PATH)/dn.csv
+	@$(foreach DN, $(shell seq $(START_DN) $(END_DN)), `echo "$(DN)" >> $(DATA_PATH)/dn.csv`)
 
-.PHONY: register
 register:
 	@echo "register:"
 	@$(SIPP) $(OPTIONS) \
@@ -46,7 +37,12 @@ register:
 .PHONY: unregister
 unregister:
 	@echo "unregister:"
-	@$(SIPP) $(REG_FLAGS) $(OPTIONS) -r 100 -m $(DN_CNT) -sf $(UNREG_SCN) -inf $(DN_DATA)
+	@$(SIPP) $(OPTIONS) \
+		$(PBX) \
+		-d $(PAUSE_TIME) \
+		-r 100 -m 3 -t tn \
+		-sf $(SCENARIO_PATH)/unregister.xml \
+		-inf csv/dn.csv
 
 .PHONY: base
 base:
