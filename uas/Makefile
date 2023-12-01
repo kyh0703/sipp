@@ -31,7 +31,7 @@ dn:
 
 regist:
 	@echo "regist:"
-	@$(SIPP) $(OPTIONS) \
+	@$(SIPP) $(PBX) \
 		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
 		-r 100 -m 3 -t tn \
@@ -44,7 +44,7 @@ regist:
 .PHONY: unregist
 unregist:
 	@echo "unregist:"
-	@$(SIPP) $(OPTIONS) \
+	@$(SIPP) $(PBX) \
 		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
 		-r 100 -m 3 -t tn \
