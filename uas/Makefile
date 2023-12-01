@@ -38,6 +38,8 @@ regist:
 		-max_socket 100 -trace_err -trace_msg \
 		-sf $(REGI_SCENARIO_PATH)/register.xml \
 		-inf csv/dn.csv
+	@mkdir -p $(LOG_PATH)
+	@cp $(REGI_SCENARIO_PATH)/*.log $(LOG_PATH)
 
 .PHONY: unregist
 unregist:
@@ -49,6 +51,8 @@ unregist:
 		-max_socket 100 -trace_err -trace_msg \
 		-sf $(REGI_SCENARIO_PATH)/unregister.xml \
 		-inf csv/dn.csv
+	@mkdir -p $(LOG_PATH)
+	@cp $(REGI_SCENARIO_PATH)/*.log $(LOG_PATH)
 
 .PHONY: base
 base:
