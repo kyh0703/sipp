@@ -1,11 +1,9 @@
 SIPP=../build/bin/sipp
 
-#DN_LIST = $(shell seq $(SDN) $(EDN))
-#DN_CNT  = $(words $(DN_LIST))
-
 REGI_SCENARIO_PATH = xml/register
 CALL_SCENARIO_PATH = xml/call
 DATA_PATH          = csv
+LOG_PATH           = log
 
 PBX         = 100.100.106.153:5060
 LOCAL_IP    = 100.100.108.141
@@ -16,14 +14,20 @@ OPTIONS     = -max_socket 100 -trace_err -trace_msg -trace_calldebug
 
 START_DN    = 6001
 END_DN      = 6300
+MD5_ID      = test
+MD5_PSW     = test
 
-defeault: data register base
+defeault: dn register base
 
-.PHONY: data
-data:
-	@echo "data:"
+.PHONY: dn
+dn:
+	@echo "dn:"
 	@echo "SEQUENTIAL" > $(DATA_PATH)/dn.csv
-	@$(foreach DN, $(shell seq $(START_DN) $(END_DN)), `echo "$(DN)" >> $(DATA_PATH)/dn.csv`)
+	@echo "# user, domain, authentication" >> $(DATA_PATH)/dn.csv
+	@$(foreach DN, \
+		 $(shell seq $(START_DN) $(END_DN)), \
+		 `echo "$(DN);$(PBX);[authentication username=$(MD5_ID) password=$(MD5_PSW)]" >> $(DATA_PATH)/dn.csv` \
+	 )
 
 register:
 	@echo "register:"
