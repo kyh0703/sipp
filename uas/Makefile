@@ -16,7 +16,7 @@ OPTIONS     = -max_socket 100 -trace_err -trace_msg -trace_calldebug
 START_DN    = 6001
 END_DN      = 6300
 
-defeault: register base
+defeault: data register base
 
 .PHONY: data
 data:
