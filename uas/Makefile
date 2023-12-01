@@ -29,23 +29,24 @@ dn:
 		 `echo "$(DN);$(PBX);[authentication username=$(MD5_ID) password=$(MD5_PSW)]" >> $(DATA_PATH)/dn.csv` \
 	 )
 
-register:
-	@echo "register:"
+regist:
+	@echo "regist:"
 	@$(SIPP) $(OPTIONS) \
- 		$(PBX) \
 		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
 		-r 100 -m 3 -t tn \
+		-max_socket 100 -trace_err -trace_msg \
 		-sf $(REGI_SCENARIO_PATH)/register.xml \
 		-inf csv/dn.csv
 
-.PHONY: unregister
-unregister:
-	@echo "unregister:"
+.PHONY: unregist
+unregist:
+	@echo "unregist:"
 	@$(SIPP) $(OPTIONS) \
-		$(PBX) \
+		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
 		-r 100 -m 3 -t tn \
+		-max_socket 100 -trace_err -trace_msg \
 		-sf $(REGI_SCENARIO_PATH)/unregister.xml \
 		-inf csv/dn.csv
 
