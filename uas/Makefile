@@ -1,4 +1,4 @@
-SIPP=../bin/sipp
+SIPP=../build/bin/sipp
 
 #DN_LIST = $(shell seq $(SDN) $(EDN))
 #DN_CNT  = $(words $(DN_LIST))
