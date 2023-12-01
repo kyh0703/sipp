@@ -29,15 +29,16 @@ dn:
 		 `echo "$(DN);$(PBX);[authentication username=$(MD5_ID) password=$(MD5_PSW)]" >> $(DATA_PATH)/dn.csv` \
 	 )
 
+.PHONY: regist
 regist:
 	@echo "regist:"
 	@$(SIPP) $(PBX) \
 		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
-		-r 100 -m 3 -t tn \
+		-r 100 -t tn \
 		-max_socket 100 -trace_err -trace_msg \
 		-sf $(REGI_SCENARIO_PATH)/register.xml \
-		-inf csv/dn.csv
+		-inf csv/dn.csv; ret=$$?
 	@mkdir -p $(LOG_PATH)
 	@cp $(REGI_SCENARIO_PATH)/*.log $(LOG_PATH)
 
@@ -47,10 +48,11 @@ unregist:
 	@$(SIPP) $(PBX) \
 		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
-		-r 100 -m 3 -t tn \
+		-r 100 \
+		-t tn \
 		-max_socket 100 -trace_err -trace_msg \
 		-sf $(REGI_SCENARIO_PATH)/unregister.xml \
-		-inf csv/dn.csv
+		-inf csv/dn.csv; ret=$$?
 	@mkdir -p $(LOG_PATH)
 	@cp $(REGI_SCENARIO_PATH)/*.log $(LOG_PATH)
 
