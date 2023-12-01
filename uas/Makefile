@@ -3,8 +3,9 @@ SIPP=../build/bin/sipp
 #DN_LIST = $(shell seq $(SDN) $(EDN))
 #DN_CNT  = $(words $(DN_LIST))
 
-SCENARIO_PATH = xml/call
-DATA_PATH     = csv
+REGI_SCENARIO_PATH = xml/register
+CALL_SCENARIO_PATH = xml/call
+DATA_PATH          = csv
 
 PBX         = 100.100.106.153:5060
 LOCAL_IP    = 100.100.108.141
@@ -31,7 +32,7 @@ register:
 		-i $(LOCAL_IP) -p $(LOCAL_PORT) \
 		-d $(PAUSE_TIME) \
 		-r 100 -m 3 -t tn \
-		-sf $(SCENARIO_PATH)/register.xml \
+		-sf $(REGI_SCENARIO_PATH)/register.xml \
 		-inf csv/dn.csv
 
 .PHONY: unregister
@@ -41,7 +42,7 @@ unregister:
 		$(PBX) \
 		-d $(PAUSE_TIME) \
 		-r 100 -m 3 -t tn \
-		-sf $(SCENARIO_PATH)/unregister.xml \
+		-sf $(REGI_SCENARIO_PATH)/unregister.xml \
 		-inf csv/dn.csv
 
 .PHONY: base
