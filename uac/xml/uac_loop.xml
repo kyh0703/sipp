@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE scenario SYSTEM "sipp.dtd">
 
-<scenario name="Basic Sipstone UAC">
+<scenario name="Basic Loop UAC">
 
 <send crlf="true" retrans="500">
 <![CDATA[
@@ -13,19 +13,26 @@ Call-ID: [call_id]
 CSeq: 1 INVITE
 Contact: sip:[field0]@[local_ip]:[local_port]
 Route: <sip:[field0]@[remote_ip];lr;term>,<sip:[local_ip]:[remote_port];lr;OdiPsi=[field0]>
-Record-Route: <sip:wcpdsap01@[local_ip]:[local_port];transport=udp;lr>
-Session-Expires: 1800;refresher=uac
 Max-Forwards: 70
 Subject: Performance Test
 Content-Type: application/sdp
-Content-Length: 0
+Content-Length: [len]
+
+v=0
+o=user1 53655765 2353687637 IN IP[local_ip_type] [local_ip]
+s=-
+c=IN IP[media_ip_type] [media_ip]
+t=0 0
+m=audio [media_port] RTP/AVP 0 101
+a=rtpmap:0 PCMU/8000
+a=rtpmap:101 telephone-event/8000
 ]]>
 </send>
 
-<recv response="100" optional="true"></recv>
-<recv response="180" optional="true"></recv>
-<recv response="183" optional="true"></recv>
-<recv response="200" rtd="true"></recv>
+<recv response="100" optional="true" />
+<recv response="180" optional="true" />
+<recv response="183" optional="true" />
+<recv response="200" rtd="true" />
 
 <send>
 <![CDATA[
@@ -38,6 +45,22 @@ CSeq: 1 ACK
 Contact: sip:[field0]@[local_ip]:[local_port]
 Max-Forwards: 70
 Subject: Performance Test
+Content-Length: 0
+]]>
+</send>
+
+<recv request="INVITE" crlf="true" />
+
+<send retrans="500">
+<![CDATA[
+SIP/2.0 200 OK
+[last_Via:]
+[last_From:]
+[last_To:];tag=[call_number]
+[last_Call-ID:]
+[last_CSeq:]
+Contact: <sip:[local_ip]:[local_port];transport=[transport]>
+Content-Type: application/sdp
 Content-Length: [len]
 
 v=0
@@ -50,10 +73,13 @@ a=rtpmap:0 PCMU/8000
 ]]>
 </send>
 
+<recv request="ACK" rtd="true" crlf="true" />
+
 <label id="LABEL_QUEUE"/>
 
-<recv request="INVITE" optional="true" crlf="true" next="LABEL_REINVITE" timeout="20000" ontimeout="LABEL_TIMEOUT"></recv>
+<recv request="INVITE" optional="true" crlf="true" next="LABEL_REINVITE"></recv>
 <recv request="BYE" timer="10000" ontimer="LABEL_TIMEOUT"></recv>
+
 <send crlf="true" next="END">
 <![CDATA[
 SIP/2.0 200 OK
@@ -92,12 +118,12 @@ a=rtpmap:0 PCMU/8000
 ]]>
 </send>
 
-<recv request="ACK" rtd="true" crlf="true" next="LABEL_LOOP"  timer="1000" ontimer="LABEL_TIMEOUT"></recv>
+<recv request="ACK" rtd="true" crlf="true" next="LABEL_LOOP" />
 
 <label id="LABEL_LOOP"/>
 
-<recv request="INVITE" optional="true" crlf="true" next="LABEL_REINVITE2" timeout="20000" ontimeout="LABEL_TIMEOUT"></recv>
-<recv request="BYE" timer="10000" ontimer="LABEL_TIMEOUT"></recv>
+<recv request="INVITE" optional="true" crlf="true" next="LABEL_REINVITE2" />
+<recv request="BYE" timer="10000" ontimer="LABEL_TIMEOUT" />
 
 <send crlf="true" next="END">
 <![CDATA[
@@ -137,8 +163,7 @@ a=rtpmap:0 PCMU/8000
 ]]>
 </send>
 
-<recv request="ACK" rtd="true" crlf="true" next="LABEL_LOOP"></recv>
-
+<recv request="ACK" rtd="true" crlf="true" next="LABEL_LOOP" />
 <pause milliseconds = "1000"/>
 
 <label id="LABEL_TIMEOUT"/>
