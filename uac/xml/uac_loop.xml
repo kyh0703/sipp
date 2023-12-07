@@ -6,13 +6,12 @@
 <send crlf="true" retrans="500">
 <![CDATA[
 INVITE sip:[field1]@[remote_ip]:[remote_port] SIP/2.0
-From: <tel:[field0]>;tag=[call_number]
-To: <tel:[field1]>
+From: sipp <sip:[field0]>;tag=[call_number]
+To: <sip:[service]@[remote_ip]:[remote_port]>
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
 Call-ID: [call_id]
 CSeq: 1 INVITE
 Contact: sip:[field0]@[local_ip]:[local_port]
-Route: <sip:[field0]@[remote_ip];lr;term>,<sip:[local_ip]:[remote_port];lr;OdiPsi=[field0]>
 Max-Forwards: 70
 Subject: Performance Test
 Content-Type: application/sdp
