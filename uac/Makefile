@@ -22,7 +22,7 @@ uac:
 		-r $(CPS) \
 		-l $(MAX_LINE) \
 		-m $(MAX_CALL) \
-		-sf SCENARIO_PATH/uac.xml \
+		-sf $(SCENARIO_PATH)/uac.xml \
 		-inf $(DATA_PATH)/uac.csv
 
 .PHONY: clean
